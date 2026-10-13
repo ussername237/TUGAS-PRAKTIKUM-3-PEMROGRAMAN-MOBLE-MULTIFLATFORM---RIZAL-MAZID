@@ -1,39 +1,52 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
+import { COLORS, SPACE, TYPO, RADIUS, MIN_TOUCH } from '../styles/tokens';
 
-export default function DiaryCard({ title, date, preview, moodUri, borderColor }) {
+export default function DiaryCard({ title, date, preview, moodUri, variant = 'list', onPress }) {
+  const isGrid = variant === 'grid';
+
   return (
-    <View style={[styles.card, { borderColor: borderColor || '#e5e7eb' }]}>
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${title}, tanggal ${date}. Ketuk untuk membuka detail.`}
+      style={({ pressed }) => [
+        styles.card,
+        isGrid ? styles.cardGrid : styles.cardList,
+        pressed && styles.pressed,
+      ]}
+    >
       <Image
-        source={typeof moodUri === 'string' ? { uri: moodUri } : moodUri}
-        style={styles.mood}
+        source={{ uri: moodUri }}
+        style={isGrid ? styles.moodGrid : styles.moodList}
+        accessibilityLabel={`Ilustrasi suasana untuk ${title}`}
       />
-      <View style={styles.content}>
-        <Text style={styles.title} numberOfLines={1}>
-          {title}
-        </Text>
+      <View style={styles.textWrap}>
+        <Text style={styles.title} numberOfLines={1}>{title}</Text>
         <Text style={styles.date}>{date}</Text>
-        <Text style={styles.preview} numberOfLines={3} ellipsizeMode="tail">
-          {preview}
-        </Text>
+        <Text style={styles.preview} numberOfLines={3}>{preview}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    flexDirection: 'row',
-    gap: 12,
-    padding: 12,
+    backgroundColor: COLORS.card,
+    borderRadius: RADIUS.l,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 12,
-    marginBottom: 12,
+    borderColor: COLORS.border,
+    padding: SPACE.m,
+    minHeight: MIN_TOUCH,
+    gap: SPACE.m,
   },
-  mood: { width: 64, height: 64, borderRadius: 32 },
-  content: { flex: 1 },
-  title: { fontSize: 16, fontWeight: '700' },
-  date: { fontSize: 12, color: '#6b7280', marginBottom: 6 },
-  preview: { fontSize: 14 },
+  cardList: { flexDirection: 'row', alignItems: 'center' },
+  cardGrid: { flexDirection: 'column' },
+  pressed: { opacity: 0.7 },
+  moodList: { width: 72, height: 72, borderRadius: RADIUS.m },
+  moodGrid: { width: '100%', height: 120, borderRadius: RADIUS.m },
+  textWrap: { flex: 1, gap: SPACE.xs },
+  title: { fontSize: TYPO.h2, fontWeight: '700', color: COLORS.text },
+  date: { fontSize: TYPO.caption, color: COLORS.muted },
+  preview: { fontSize: TYPO.body, color: COLORS.text },
 });
