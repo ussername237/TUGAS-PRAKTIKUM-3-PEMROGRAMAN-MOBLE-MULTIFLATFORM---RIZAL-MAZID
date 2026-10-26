@@ -31,6 +31,9 @@ export default function DiaryCard({
       <Pressable
         onPress={onPress}
         style={styles.mainContent}
+        accessibilityRole="button"
+        accessibilityLabel={`Buka entri ${title}`}
+        accessibilityHint="Membuka detail catatan."
       >
         {imageSource ? (
           <Image
@@ -70,6 +73,7 @@ export default function DiaryCard({
         accessibilityLabel={
           liked ? 'Batalkan suka' : 'Sukai catatan'
         }
+        accessibilityState={{ selected: liked }}
       >
         <Text style={styles.like}>
           {liked ? '❤️' : '🤍'}

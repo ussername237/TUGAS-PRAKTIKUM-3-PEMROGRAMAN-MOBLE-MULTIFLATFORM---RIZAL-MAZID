@@ -9,9 +9,18 @@ import {
   Alert,
 } from 'react-native';
 
+const getToday = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};
+
 export default function EntryForm({ onSubmit }) {
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState('2026-10-21');
+  const [date, setDate] = useState(getToday);
   const [preview, setPreview] = useState('');
 
   const canSubmit =
@@ -48,7 +57,7 @@ export default function EntryForm({ onSubmit }) {
     onSubmit(newEntry);
 
     setTitle('');
-    setDate('2026-10-21');
+    setDate(getToday());
     setPreview('');
   };
 

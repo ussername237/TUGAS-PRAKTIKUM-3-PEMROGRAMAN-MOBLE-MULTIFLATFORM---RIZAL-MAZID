@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   View,
@@ -9,24 +9,15 @@ import {
 import { COLORS, SPACE, RADIUS, MIN_TOUCH } from '../styles/tokens';
 
 export default function SearchBar({
+  value = '',
   placeholder = 'Cari entri diary...',
   onChange,
 }) {
-  const [queryText, setQueryText] = useState('');
-
-  const handleChange = (text) => {
-    setQueryText(text);
-
-    if (typeof onChange === 'function') {
-      onChange(text);
-    }
-  };
-
   return (
     <View style={styles.container}>
       <TextInput
-        value={queryText}
-        onChangeText={handleChange}
+        value={value}
+        onChangeText={onChange}
         placeholder={placeholder}
         placeholderTextColor={COLORS.muted}
         style={styles.input}
